@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Romantik Doğum Günü Sürprizi</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      font-family: 'Arial', sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      animation: bgGradient 20s infinite alternate;
+      transition: background 2s ease;
+    }
+
+    @keyframes bgGradient {
+      0% { background: #ffc0cb; }
+      33% { background: #cc99ff; }
+      66% { background: #ff6666; }
+      100% { background: #ff9999; }
+    }
+
+    h1, h2, h3 {
+      color: white;
+      text-align: center;
+      margin: 5px 0;
+      text-shadow: 2px 2px 5px #ff6666;
+    }
+
+    .boxes {
+      display: flex;
+      gap: 20px;
+      margin: 20px 0;
+    }
+
+    .box {
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 15px;
+      padding: 20px;
+      width: 200px;
+      text-align: center;
+      font-size: 18px;
+      color: #fff;
+      text-shadow: 1px 1px 3px #ff6666;
+      backdrop-filter: blur(5px);
+      opacity: 0;
+      transform: translateY(30px);
+      transition: all 1s ease;
+    }
+
+    .box.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background-color: #ff6666;
+      color: white;
+      box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+      margin: 5px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 0 20px #fff;
+    }
+
+    /* Kalpler */
+    .heart {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: red;
+      transform: rotate(-45deg);
+      top: -50px;
+      animation: fall linear infinite;
+    }
+
+    .heart::before,
+    .heart::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: inherit;
+      border-radius: 50%;
+    }
+
+    .heart::before { top: -10px; left: 0; }
+    .heart::after { left: 10px; top: 0; }
+
+    @keyframes fall {
+      0% { transform: translateY(-50px) rotate(-45deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(-45deg); opacity: 0; }
+    }
+
+    #surpriseText, #luckyText, #birthdayText {
+      margin-top: 20px;
+      font-size: 20px;
+      color: white;
+      text-shadow: 1px 1px 3px #ff3333;
+      display: none;
+      text-align: center;
+      position: relative;
+      z-index: 10;
+      white-space: pre-wrap;
+      overflow: hidden;
+    }
+
+    #specialBtn { position: fixed; bottom: 20px; right: 20px; background-color: #ff4081; font-size: 16px; padding: 12px 18px; border-radius: 20px; display:none; }
+    #luckyBtn { position: fixed; bottom: 20px; left: 20px; background-color: #ff1493; font-size: 16px; padding: 12px 18px; border-radius: 20px; }
+    #birthdayBtn { display: none; margin-top: 20px; padding: 12px 20px; font-size: 18px; background-color: #f0b000; color: white; border-radius: 15px; cursor: pointer; }
+
+    /* Parlak beyaz noktalar */
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: white;
+      border-radius: 50%;
+      top: 0;
+      left: 0;
+      opacity: 0.8;
+      box-shadow: 0 0 8px white;
+      animation: twinkle 2s infinite alternate;
+    }
+
+    @keyframes twinkle {
+      0% { opacity: 0.5; }
+      50% { opacity: 1; }
+      100% { opacity: 0.5; }
+    }
+
+  </style>
+</head>
+<body>
+
+  <h1>Seninle tanıştığım o özel gün: 01 Haziran 2025 💖</h1>
+  <h2>Doğum Günün Kutlu Olsun! 🎂 (10 Ekim 2025)</h2>
+  <h3 id="countdown"></h3>
+
+  <div class="boxes">
+    <div class="box">Sen gerçekten harika bir insansın 💖</div>
+    <div class="box">Gözlerin, evrendeki en güzel manzara 🥰</div>
+    <div class="box">Senin güzelliğin, yıldızları kıskandırıyor ✨</div>
+  </div>
+
+  <div>
+    <button onclick="playMusic()">🎵 Şarkıyı Çal</button>
+    <button onclick="stopMusic()">⏹️ Şarkıyı Durdur</button>
+    <button onclick="launchConfetti()">🎉 Konfeti</button>
+  </div>
+
+  <button id="specialBtn" onclick="showSurprise()">🌸 Sürprizi Gör</button>
+  <div id="surpriseText">Sen benim en güzel tesadüfümsün 💖</div>
+
+  <button id="luckyBtn" onclick="showLucky()">🍀 Şanslıyım</button>
+  <div id="luckyText">
+Ben dünyanın en şanslı insanıyım 💕
+Bu dünyada 5 okyanus, 7 kıta, 195 ülke ve yaklaşık 100.000 şehir var...
+Ama ben seninle karşılaştım. 💖
+  </div>
+
+  <button id="birthdayBtn" onclick="showBirthday()">🎁 Kutlamayı Başlat</button>
+  <div id="birthdayText">
+Her yıldız senin gülüşünden ışık alıyor, gökyüzü bile bugün senin için parlıyor ✨
+Doğum günün kutlu olsun canımmm! 🎂✨
+nice mutlu yıllara!
+  </div>
+
+  <audio id="music" src="SendenDahaGuzel.mp3"></audio>
+
+  <script>
+    const music = document.getElementById('music');
+
+    function playMusic() { music.play(); }
+    function stopMusic() { music.pause(); music.currentTime = 0; }
+
+    // Kutucuk animasyonu sırayla
+    const boxes = document.querySelectorAll('.box');
+    boxes.forEach((box, index) => {
+      setTimeout(() => {
+        box.classList.add('show');
+      }, index * 500);
+    });
+
+    // Kalpler
+    const heartColors = ["#ff4d6d", "#ff1a1a", "#cc00cc", "#ff66b2"];
+    function createHeart() {
+      const heart = document.createElement('div');
+      heart.className = 'heart';
+      heart.style.backgroundColor = heartColors[Math.floor(Math.random() * heartColors.length)];
+      heart.style.left = Math.random() * window.innerWidth + 'px';
+      heart.style.animationDuration = (5 + Math.random() * 5) + 's';
+      document.body.appendChild(heart);
+      setTimeout(() => heart.remove(), 10000);
+    }
+    setInterval(createHeart, 300);
+
+    // Geri sayım
+    function updateCountdown() {
+      const birthday = new Date("2025-10-10T00:00:00").getTime();
+      const now = new Date().getTime();
+      const diff = birthday - now;
+      if(diff <= 0){
+        document.getElementById("countdown").innerText = "🎉 Doğum Günün Geldi! 🎉";
+        return;
+      }
+      const days = Math.floor(diff / (1000*60*60*24));
+      const hours = Math.floor((diff % (1000*60*60*24)) / (1000*60*60));
+      const minutes = Math.floor((diff % (1000*60*60)) / (1000*60));
+      const seconds = Math.floor((diff % (1000*60)) / 1000);
+      document.getElementById("countdown").innerText = `Doğum gününe kalan: ${days} gün ${hours} saat ${minutes} dakika ${seconds} saniye`;
+    }
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+
+    // Buton işlevleri
+    function showLucky() {
+      document.getElementById('luckyText').style.display = "block";
+      document.getElementById('specialBtn').style.display = "inline-block";
+    }
+
+    function showSurprise() {
+      document.getElementById('surpriseText').style.display = "block";
+      document.getElementById('birthdayBtn').style.display = "inline-block";
+    }
+
+    function showBirthday() {
+      document.getElementById('birthdayText').style.display = "block";
+      
+      document.body.style.animation = "none";
+      setTimeout(() => {
+        document.body.style.background = "#0b0b3b";
+      }, 50);
+      
+      launchConfetti(300); 
+      createStars(200);
+      for(let i=0;i<100;i++) createHeart();
+    }
+
+    // Konfeti
+    function launchConfetti(count=150) {
+      for(let i=0;i<count;i++){
+        const confetti=document.createElement("div");
+        confetti.style.position="fixed";
+        confetti.style.width="8px";
+        confetti.style.height="14px";
+        confetti.style.backgroundColor=`hsl(${Math.random()*360},100%,50%)`;
+        confetti.style.top="-20px";
+        confetti.style.left=Math.random()*window.innerWidth+"px";
+        confetti.style.opacity=Math.random();
+        confetti.style.transform=`rotate(${Math.random()*360}deg)`;
+        document.body.appendChild(confetti);
+
+        const endX=Math.random()*window.innerWidth;
+        const endY=window.innerHeight+50;
+        const duration=2000+Math.random()*2000;
+
+        confetti.animate([
+          {transform:`translate(0,0) rotate(0deg)`, opacity:1},
+          {transform:`translate(${endX-parseFloat(confetti.style.left)}px, ${endY}px) rotate(${Math.random()*720}deg)`, opacity:0}
+        ], {duration:duration, easing:"ease-out"});
+
+        setTimeout(()=>confetti.remove(),duration);
+      }
+    }
+
+    // Yıldız animasyonu - kalıcı
+    function createStars(count){
+      for(let i=0;i<count;i++){
+        const star = document.createElement("div");
+        star.className = "star";
+        star.style.top = Math.random()*window.innerHeight + "px";
+        star.style.left = Math.random()*window.innerWidth + "px";
+        star.style.animationDuration = (1+Math.random()*2) + "s";
+        document.body.appendChild(star);
+      }
+    }
+  </script>
+
+</body>
+</html>
